@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Galactic Clicker</title>
+    <link rel="stylesheet" href="../css/clicker.css">
+</head>
+<body>
+
+    <div class="game-wrapper">
+        <div class="main-stats">
+            <h1>GALACTIC CLICKER</h1>
+            <div class="score-box">
+                <span id="score">0</span>
+                <p>Star Credits</p>
+                <small id="auto-rate">Income: 0/sec</small>
+            </div>
+            
+            <div class="click-area">
+                <button id="click-btn">🚀</button>
+            </div>
+        </div>
+
+        <div class="shop-container">
+            <h2>Command Center</h2>
+            
+            <button class="upgrade-btn" id="buy-multiplier">
+                <strong>Better Engines</strong><br>
+                Cost: <span id="mult-cost">10</span> | +1 Per Click
+            </button>
+
+            <button class="upgrade-btn" id="buy-auto">
+                <strong>Hire Astronaut</strong><br>
+                Cost: <span id="auto-cost">50</span> | +1 Per Sec
+            </button>
+
+            <button id="reset-btn">Abort Mission (Reset)</button>
+        </div>
+    </div>
+
+    <script src="D:\school_Days_game\js\clicker.js"></script>
+</body>
+</html>

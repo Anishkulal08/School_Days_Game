@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hangman Game</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: rgb(141, 162, 224);
+      margin: 0;
+      padding: 20px;
+      color: #333;
+
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    #wordDisplay {
+      font-size: 2rem;
+      letter-spacing: 10px;
+      margin: 20px 0;
+    }
+
+    #keyboard {
+      max-width: 420px;
+      margin: 20px auto;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 5px;
+    }
+
+    #keyboard button {
+      padding: 10px;
+      margin: 3px;
+      font-size: 18px;
+      cursor: pointer;
+    }
+
+    #keyboard button:disabled {
+      background: #ddd;
+      cursor: not-allowed;
+    }
+
+    #message {
+      font-size: 1.2rem;
+      margin: 20px 0;
+      font-weight: bold;
+    }
+
+    #resetBtn {
+      padding: 10px 20px;
+      font-size: 16px;
+      background: #0d93ec;
+      border: 2px solid black;
+      color: white;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    #resetBtn:hover {
+      background: #2980b9;
+    }
+
+    canvas {
+      border: 1px solid #ccc;
+      margin: 10px auto;
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+  <h1 style="color: gold;">Hangman Game</h1>
+  <canvas id="hangmanCanvas" width="200" height="200"></canvas>
+
+  <p id="wordDisplay">_ _ _ _ _</p>
+  <div id="keyboard"></div>
+
+  <p id="message"></p>
+  <button id="resetBtn">Restart Game</button>
+
+  <script>
+    // Expanded word list (you can add as many as you like)
+    const words = [
+      "JAVASCRIPT", "PYTHON", "PROGRAMMING", "COMPUTER", "HANGMAN",
+      "DEVELOPER", "CODING", "HTML", "CSS", "ALGORITHM",
+      "DATABASE", "KEYBOARD", "VARIABLE", "FUNCTION", "OBJECT",
+      "DEBUGGING", "NETWORK", "REACT", "ANGULAR", "GITHUB", "APPLE", "BRAVE", "CHAIR", "DREAM", "EAGLE",
+      "FLAME", "GIANT", "HEART", "ISLAND", "JOKER",
+      "KNIFE", "LIGHT", "MAGIC", "NORTH", "OCEAN",
+      "PLANT", "QUEEN", "RIVER", "SMILE", "TRAIN",
+      "URBAN", "VIRUS", "WORLD", "XENON", "YOUTH",
+      "ZEBRA", "STONE", "CLOUD", "LASER", "ROBOT",
+      "MANGO", "PIXEL", "GHOST", "SUGAR", "METAL",
+      "SOUND", "LEVEL", "CRANE", "BLAST", "SPORT",
+      "WATER", "EARTH", "MUSIC", "SMOKE", "SOLAR",
+      "PLAZA", "GAMER", "TRACK", "FAITH", "TIGER"
+    ];
+
+    let chosenWord, hiddenWord, wrongGuesses, maxWrong;
+
+    const wordDisplay = document.getElementById("wordDisplay");
+    const keyboard = document.getElementById("keyboard");
+    const message = document.getElementById("message");
+    const resetBtn = document.getElementById("resetBtn");
+    const canvas = document.getElementById("hangmanCanvas");
+    const ctx = canvas.getContext("2d");
+
+    function initGame() {
+      // Pick a random word from list
+      chosenWord = words[Math.floor(Math.random() * words.length)].toUpperCase();
+      hiddenWord = Array(chosenWord.length).fill("_");
+      wrongGuesses = 0;
+      maxWrong = 6;
+      wordDisplay.textContent = hiddenWord.join(" ");
+      message.textContent = "";
+
+      // Reset canvas
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      drawGallows();
+
+      // Build keyboard
+      keyboard.innerHTML = "";
+      for (let i = 65; i <= 90; i++) {
+        const btn = document.createElement("button");
+        btn.textContent = String.fromCharCode(i);
+        btn.addEventListener("click", handleGuess);
+        keyboard.appendChild(btn);
+      }
+    }
+
+    function handleGuess(e) {
+      const letter = e.target.textContent;
+      e.target.disabled = true;
+
+      if (chosenWord.includes(letter)) {
+        for (let i = 0; i < chosenWord.length; i++) {
+          if (chosenWord[i] === letter) hiddenWord[i] = letter;
+        }
+        wordDisplay.textContent = hiddenWord.join(" ");
+      } else {
+        wrongGuesses++;
+        drawHangman(wrongGuesses);
+      }
+      checkGameOver();
+    }
+
+    function checkGameOver() {
+      if (!hiddenWord.includes("_")) {
+        message.textContent = "You Win!";
+        message.style.color="green";
+        message.style.fontSize="24px";
+        message.style.fontWeight="bold";
+        disableKeyboard();
+      }
+      if (wrongGuesses >= maxWrong) {
+        message.textContent = `You Lose! Word was: ${chosenWord}`;
+        message.style.color="red";
+        message.style.fontSize="24px";
+        message.style.fontWeight="bold";
+        wordDisplay.textContent = chosenWord;
+        disableKeyboard();
+      }
+    }
+
+    function disableKeyboard() {
+      document.querySelectorAll("#keyboard button").forEach(btn => btn.disabled = true);
+    }
+
+    function drawGallows() {
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(10, 190); ctx.lineTo(190, 190); // base
+      ctx.moveTo(50, 190); ctx.lineTo(50, 20);   // pole
+      ctx.lineTo(130, 20);                       // top
+      ctx.lineTo(130, 40);                       // rope
+      ctx.stroke();
+    }
+
+    function drawHangman(step) {
+      switch (step) {
+        case 1: ctx.beginPath(); ctx.arc(130, 55, 15, 0, Math.PI * 2); ctx.stroke(); break; // head
+        case 2: ctx.beginPath(); ctx.moveTo(130, 70); ctx.lineTo(130, 120); ctx.stroke(); break; // body
+        case 3: ctx.beginPath(); ctx.moveTo(130, 80); ctx.lineTo(110, 100); ctx.stroke(); break; // left arm
+        case 4: ctx.beginPath(); ctx.moveTo(130, 80); ctx.lineTo(150, 100); ctx.stroke(); break; // right arm
+        case 5: ctx.beginPath(); ctx.moveTo(130, 120); ctx.lineTo(110, 150); ctx.stroke(); break; // left leg
+        case 6: ctx.beginPath(); ctx.moveTo(130, 120); ctx.lineTo(150, 150); ctx.stroke(); break; // right leg
+      }
+    }
+    document.addEventListener("keydown", (e) => {
+      const letter = e.key.toUpperCase();
+      if (/^[A-Z]$/.test(letter)) {
+        handleGuess(letter);
+      }
+    });
+
+    resetBtn.addEventListener("click", initGame);
+    initGame();
+  </script>
+</body>
+
+</html>

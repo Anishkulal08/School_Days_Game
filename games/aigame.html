@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Catch the Star with Bombs</title>
+<style>
+    body {
+        margin: 0;
+        background: linear-gradient(135deg,rgb(241, 227, 146),rgb(127, 159, 255),rgb(240, 194, 109),rgb(164, 247, 164));
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        font-family: Arial, sans-serif;
+        color: white;
+    }
+    canvas {
+        background: linear-gradient(#001d3d, #003566);
+        border: 2px solid #fff;
+        display: block;
+        margin-top: 10px;
+    }
+    #controls {
+        margin: 10px;
+        display: flex;
+        gap: 10px;
+        align-items: center;
+    }
+    button, select {
+        padding: 6px 12px;
+        font-size: 16px;
+    }
+    h1{
+        color: gold;
+        background:  linear-gradient(#001d3d, #003566);;
+        height: 50px;
+        width: 300px;
+        padding-top: 10px;
+        padding-left: 50px;
+    }
+</style>
+</head>
+<body class="">
+
+<h1>   Catch the Star   </h1>
+<div id="controls">
+    <label>Difficulty:</label>
+    <select id="difficulty">
+        <option value="1">Easy</option>
+        <option value="2">Medium</option>
+        <option value="3">Fast</option>
+    </select>
+    <button id="restartBtn" disabled>Restart Game</button>
+</div>
+
+<canvas id="gameCanvas" width="400" height="600" class=""></canvas>
+
+<script>
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+const difficultySelect = document.getElementById('difficulty');
+const restartBtn = document.getElementById('restartBtn');
+
+let basket, stars, bombs, score, timer, gameActive, highScore, keys, baseSpeed;
+
+// Initialize Game
+function initGame() {
+    baseSpeed = Number(difficultySelect.value);
+    basket = {x: canvas.width/2 - 50, y: canvas.height - 50, width: 100, height: 25, speed: 8};
+    stars = [];
+    bombs = [];
+    score = 0;
+    timer = 60;
+    gameActive = true;
+    keys = {};
+    highScore = Number(localStorage.getItem('starHighScore')) || 0;
+    restartBtn.disabled = true;
+    spawnStar();
+    spawnBomb();
+    startTimer();
+    gameLoop();
+}
+
+// Draw basket
+function drawBasket() {
+    ctx.fillStyle = "#ffcc00";
+    ctx.strokeStyle="black";
+    ctx.fillRect(basket.x, basket.y, basket.width, basket.height);
+    ctx.stroke();
+}
+
+// Draw star
+function drawStar(star) {
+    ctx.save();
+    ctx.translate(star.x + star.size/2, star.y + star.size/2);
+    ctx.rotate(Math.PI/10);
+    ctx.beginPath();
+    for(let i=0;i<5;i++){
+        ctx.lineTo(0,-star.size/2);
+        ctx.rotate(Math.PI/5);
+        ctx.lineTo(0,-star.size/4);
+        ctx.rotate(Math.PI/5);
+    }
+    ctx.closePath();
+    ctx.fillStyle='yellow';
+    ctx.fill();
+    ctx.restore();
+}
+
+// Draw bomb
+function drawBomb(bomb) {
+    ctx.fillStyle = "red";
+    ctx.beginPath();
+    ctx.arc(bomb.x + bomb.size/2, bomb.y + bomb.size/2, bomb.size/2, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = "black";
+    ctx.lineWidth = 2;
+    ctx.stroke();
+}
+
+// Draw HUD
+function drawInfo() {
+    ctx.fillStyle = "white";
+    ctx.font = "24px Arial";
+    ctx.fillText("Score: " + score, 20, 40);
+    ctx.fillText("Time: " + timer + "s", canvas.width - 150, 40);
+    ctx.fillText("High: " + highScore, 20, 70);
+}
+
+// Update basket (keyboard)
+function updateBasket() {
+    if (keys["ArrowLeft"] || keys["a"]) basket.x -= basket.speed;
+    if (keys["ArrowRight"] || keys["d"]) basket.x += basket.speed;
+    basket.x = Math.max(0, Math.min(canvas.width - basket.width, basket.x));
+}
+
+// Update and move stars
+function updateStars() {
+    for (let s of stars) {
+        s.y += s.speed;
+        // Caught star
+        if (collision(s, basket)) {
+            score=score+3;
+            resetStar(s);
+        }
+        // Missed star
+        else if (s.y > canvas.height) {
+            resetStar(s);
+        }
+    }
+}
+
+// Update and move bombs
+function updateBombs() {
+    for (let b of bombs) {
+        b.y += b.speed;
+        // Hit bomb
+        if (collision(b, basket)) {
+            score = Math.max(0, score - 2); // lose points but not below 0
+            resetBomb(b);
+        }
+        // Missed bomb
+        else if (b.y > canvas.height) {
+            resetBomb(b);
+        }
+    }
+}
+
+// Collision detection
+function collision(obj, basket) {
+    return obj.y + obj.size >= basket.y &&
+           obj.x + obj.size/2 >= basket.x &&
+           obj.x <= basket.x + basket.width;
+}
+
+// Reset positions
+function resetStar(s) {
+    s.x = Math.random() * (canvas.width - s.size);
+    s.y = -s.size;
+    s.speed = (1.5 + Math.random()*1.5) * baseSpeed;
+}
+
+function resetBomb(b) {
+    b.x = Math.random() * (canvas.width - b.size);
+    b.y = -b.size;
+    b.speed = (1.5 + Math.random()*1.5) * baseSpeed;
+}
+
+// Spawn
+function spawnStar() {
+    stars.push({x:0, y:0, size:30, speed: 2});
+    resetStar(stars[0]);
+}
+function spawnBomb() {
+    bombs.push({x:0, y:0, size:30, speed: 2});
+    resetBomb(bombs[0]);
+}
+
+// Timer
+let timerInterval;
+function startTimer() {
+    clearInterval(timerInterval);
+    timerInterval = setInterval(()=>{
+        if(gameActive){
+            timer--;
+            if(timer <= 0){
+                endGame();
+            }
+        }
+    },1000);
+}
+
+// End Game
+function endGame() {
+    gameActive = false;
+    clearInterval(timerInterval);
+    if (score > highScore) {
+        highScore = score;
+        localStorage.setItem('starHighScore', highScore);
+    }
+    setTimeout(()=>{
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+        ctx.fillStyle='white';
+        ctx.font='40px Arial';
+        ctx.fillText("Time's Up!", canvas.width/2 - 100, canvas.height/2 - 40);
+        ctx.font='30px Arial';
+        ctx.fillText("Score: " + score, canvas.width/2 - 60, canvas.height/2 + 10);
+        ctx.fillText("High Score: " + highScore, canvas.width/2 - 100, canvas.height/2 + 50);
+        restartBtn.disabled = false;
+    },50);
+}
+
+// Game Loop
+function gameLoop() {
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    if(gameActive){
+        updateBasket();
+        updateStars();
+        updateBombs();
+        drawBasket();
+        for (let s of stars) drawStar(s);
+        for (let b of bombs) drawBomb(b);
+        drawInfo();
+        requestAnimationFrame(gameLoop);
+    }
+}
+
+// Controls (keyboard)
+document.addEventListener('keydown', e => {keys[e.key]=true;});
+document.addEventListener('keyup', e => {keys[e.key]=false;});
+
+// Mouse lock control (always follows)
+canvas.addEventListener('mousemove', e => {
+    if(gameActive){
+        const rect = canvas.getBoundingClientRect();
+        const mouseX = e.clientX - rect.left;
+        // lock basket to mouse position
+        basket.x = mouseX - basket.width / 2;
+        basket.x = Math.max(0, Math.min(canvas.width - basket.width, basket.x));
+    }
+});
+
+// Restart button
+restartBtn.addEventListener('click', ()=>{
+    initGame();
+});
+
+// Start
+initGame();
+</script>
+</body>
+</html>
