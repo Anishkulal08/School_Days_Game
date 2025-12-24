@@ -1,30 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
   <title>School Days Mini Games</title>
-  <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css" /> <!-- external CSS link [web:23][web:30] -->
 </head>
 <body>
 
-<header>
-  <h1>School Days Mini Games</h1>
-  <p>childhood fun with classic games</p>
-</header>
+  <!-- soft bubbles -->
+  <div class="bubble"></div>
+  <div class="bubble"></div>
+  <div class="bubble"></div>
 
-<section class="games">
- 
-  <a href="games/hangman.html" class="card">🪢 Hangman</a>
-  <a href="games/rps.html" class="card">✊✋✌ Stone Paper Scissors</a>
-  <a href="games/aigame.html" class="card">Catch Star</a>
-  <a href="games/guessnumber.html" class="card">Guess the Number</a>
-  <a href="games/wordle.html" class="card">Paper wordle</a>
-</section>
+  <main class="wrapper">
+    <header class="heading">
+      <div class="badge">
+        <span class="badge-dot"></span>
+        <span>Play &amp; remember school days</span>
+      </div>
+      <h1>School Days Mini Games</h1>
+      <p class="subtitle">Childhood fun with classic mini games.</p>
+    </header>
 
-<footer>
-  <p>Built with ❤️ using HTML, CSS & JavaScript</p>
-</footer>
+    <section class="menu">
+      <button class="btn-game" onclick="location.href='games/hangman.html'">
+        <div class="btn-game-inner">
+          <span class="label">
+            <span class="emoji">🪢</span>
+            <span>Hangman</span>
+          </span>
+          <span class="btn-chevron">▶</span>
+        </div>
+      </button>
+
+      <button class="btn-game" onclick="location.href='games/rps.html'">
+        <div class="btn-game-inner">
+          <span class="label">
+            <span class="emoji">✊✋✌️</span>
+            <span>Stone Paper Scissors</span>
+          </span>
+          <span class="btn-chevron">▶</span>
+        </div>
+      </button>
+
+      <button class="btn-game" onclick="location.href='games/aigame.html'">
+        <div class="btn-game-inner">
+          <span class="label">
+            <span class="emoji">⭐</span>
+            <span>Catch Star</span>
+          </span>
+          <span class="btn-chevron">▶</span>
+        </div>
+      </button>
+
+      <button class="btn-game" onclick="location.href='games/guessnumber.html'">
+        <div class="btn-game-inner">
+          <span class="label">
+            <span class="emoji">🔢</span>
+            <span>Guess the Number</span>
+          </span>
+          <span class="btn-chevron">▶</span>
+        </div>
+      </button>
+
+      <button class="btn-game" onclick="location.href='games/wordle.html'">
+        <div class="btn-game-inner">
+          <span class="label">
+            <span class="emoji">Aa</span>
+            <span>Guess the Word</span>
+          </span>
+          <span class="btn-chevron">▶</span>
+        </div>
+      </button>
+    </section>
+
+    <p class="footer">Made with ❤️ Using Html, Css and Js.</p>
+  </main>
 
 </body>
 </html>
