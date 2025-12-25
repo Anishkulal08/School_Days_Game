@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://school-days-games.netlify.app/</loc>
+    <loc>https://school-days-game.netlify.app/</loc>
   </url>
   <url>
-    <loc>https://school-days-games.netlify.app/games/hangman.html</loc>
+    <loc>https://school-days-game.netlify.app/games/hangman.html</loc>
   </url>
   <url>
-    <loc>https://school-days-games.netlify.app/games/tictactoe.html</loc>
+    <loc>https://school-days-game.netlify.app/games/tictactoe.html</loc>
   </url>
   <url>
-    <loc>https://school-days-games.netlify.app/games/rps.html</loc>
+    <loc>https://school-days-game.netlify.app/games/rps.html</loc>
   </url>
 </urlset>
