@@ -29,7 +29,7 @@ body {
   position: fixed;
   border-radius: 50%;
   background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.9), rgba(255,255,255,0));
-  opacity: 0.18;
+  opacity: 0.48;
   filter: blur(1px);
   animation: floatUp 18s linear infinite;
   pointer-events: none;
@@ -43,10 +43,65 @@ body {
   50% { transform: translateY(-50vh) translateX(25px); }
   100% { transform: translateY(-100vh) translateX(-25px); }
 }
+.bubble2 {
+  position: fixed;
+  top: -150px;
+  left: 30vw;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.9), rgba(255,255,255,0));
+  opacity: 0.48;
+  filter: blur(1px);
+  animation: floatDown 18s linear infinite;
+  pointer-events: none;
+}
+@keyframes floatDown {
+  0% { transform: translateY(0) translateX(0); }
+  50% { transform: translateY(50vh) translateX(-20px); }
+  100% { transform: translateY(110vh) translateX(-25px); }
+}
+.bubble3 {
+  position: fixed;
+  top: -50px;
+  left: 80vw;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.9), rgba(255,255,255,0));
+  opacity: 0.48;
+  filter: blur(1px);
+  animation: floatDown2 18s linear infinite;
+  pointer-events: none;
+}
+@keyframes floatDown2 {
+  0% { transform: translateY(30vh) translateX(0); }
+  50% { transform: translateY(50vh) translateX(-20px); }
+  100% { transform: translateY(110vh) translateX(-25px); }
+}
+.bubble4 {
+  position: fixed;
+  top: 450px;
+  left: 0;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.9), rgba(255,255,255,0));
+  opacity: 0.48;
+  filter: blur(1px);
+  animation: floatDown3 18s linear infinite;
+  pointer-events: none;
+}
+@keyframes floatDown3 {
+  0% { transform: translateY(0) translateX(0); }
+  50% { transform: translateY(0) translateX(550px); }
+  100% { transform: translateY(0) translateX(100vw); }
+}
+
 
 /* main glass card */
 .wrapper {
-  position: relative;
+  position:absolute;
   width: min(420px, 92vw);
   padding: 28px 22px 32px;
   border-radius: 26px;
