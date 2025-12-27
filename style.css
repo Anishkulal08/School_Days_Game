@@ -101,7 +101,7 @@ body {
 
 /* main glass card */
 .wrapper {
-  position:absolute;
+  position: relative;
   width: min(420px, 92vw);
   padding: 28px 22px 32px;
   border-radius: 26px;
