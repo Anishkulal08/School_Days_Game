@@ -1,4 +1,0 @@
-User-agent:*
-Allow:/
-Sitemap:
-https://school-days-game.netlify.app/sitemap.xml
