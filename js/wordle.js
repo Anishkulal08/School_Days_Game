@@ -15,13 +15,18 @@ const boardElem = document.getElementById("board");
 const keyboardElem = document.getElementById("keyboard");
 const statusElem = document.getElementById("status");
 const restartBtn = document.getElementById("restartBtn");
+const display=document.getElementById("hint")
+const hintrep=display.innerText;
+const hintcol=display.style.color;
+const hintsize=display.style.fontSize;
+const hintfont=display.style.fontWeight;
 
 const ROWS = 6;
 const COLS = 5;
 const keyboardLayout = [
   "QWERTYUIOP",
   "ASDFGHJKL",
-  "ENTERZXCVBNM⌫"
+  "ZXCVBNM⌫"
 ];
 
 let solution = "";
@@ -91,6 +96,7 @@ function setStatus(msg, type = "") {
   if (!msg) return;
   const span = document.createElement("span");
   span.textContent = msg;
+  
   if (type) span.classList.add(type);
   statusElem.appendChild(span);
 }
@@ -211,11 +217,19 @@ function submitGuess() {
   flipRow(currentRow, evaluation, () => {
     if (guess === solution) {
       setStatus(`Nice! You got "${solution}".`, "win");
+      display.textContent=`You Win "${solution}"`;
+      display.style.color="green"
+      display.style.fontSize="25px";
+      display.style.fontWeight="bold";
       gameOver = true;
       return;
     }
     if (currentRow === ROWS - 1) {
       setStatus(`Out of tries. Word was "${solution}".`, "lose");
+      display.textContent=`You Lost "${solution}"`;
+      display.style.color="red"
+      display.style.fontSize="25px";
+      display.style.fontWeight="bold";
       gameOver = true;
       return;
     }
@@ -228,6 +242,10 @@ function resetGame() {
   solution = randomWord();
   currentRow = 0;
   currentCol = 0;
+  display.innerText=hintrep;
+  display.style.color=hintcol;
+  display.style.fontSize=hintsize;
+  display.style.fontWeight=hintfont;
   guesses = Array.from({ length: ROWS }, () => Array(COLS).fill(""));
   gameOver = false;
   createBoard();
