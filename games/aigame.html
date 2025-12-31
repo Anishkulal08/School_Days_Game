@@ -139,7 +139,7 @@ function updateStars() {
         s.y += s.speed;
         // Caught star
         if (collision(s, basket)) {
-            score=score+3;
+            score=score+2;
             resetStar(s);
         }
         // Missed star
@@ -155,7 +155,7 @@ function updateBombs() {
         b.y += b.speed;
         // Hit bomb
         if (collision(b, basket)) {
-            score = Math.max(0, score - 2); // lose points but not below 0
+            score = Math.max(0, score - 5); // lose points but not below 0
             resetBomb(b);
         }
         // Missed bomb

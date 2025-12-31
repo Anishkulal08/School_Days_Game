@@ -1,0 +1,177 @@
+:root {
+  --bg1: #020024;
+  --bg2: #090979;
+  --bg3: #00d4ff;
+  --accent: #ffd93b;
+  --accent2: #ff6bcb;
+  --panel: rgba(4, 12, 46, 0.9);
+  --text: #f7f7ff;
+  --danger: #ff4b4b;
+  --shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
+  --radius: 16px;
+  --transition-fast: 0.2s ease-out;
+}
+
+/* Animated gradient background [web:8][web:20] */
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: var(--text);
+  background: linear-gradient(130deg, var(--bg1), var(--bg2), var(--bg3));
+  background-size: 300% 300%;
+  animation: gradientMove 15s ease infinite;
+}
+
+@keyframes gradientMove {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Layout */
+.game-wrapper {
+  width: 100%;
+  max-width: 600px;
+  margin: 12px;
+  padding: 16px;
+  background: linear-gradient(145deg, rgba(10, 24, 61, 0.98), rgba(10, 7, 35, 0.98));
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  box-sizing: border-box;
+}
+
+/* Header */
+.game-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.game-header h1 {
+  margin: 0;
+  font-size: clamp(1.4rem, 2.6vw + 0.4rem, 2rem);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent);
+  text-shadow: 0 0 10px rgba(255, 217, 59, 0.7);
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+}
+
+label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+select,
+button {
+  border-radius: 999px;
+  border: none;
+  padding: 6px 12px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  outline: none;
+}
+
+/* Buttons */
+#restartBtn {
+  background: linear-gradient(135deg, var(--accent), #ffb703);
+  color: #201b3b;
+  font-weight: 600;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast),
+    filter var(--transition-fast);
+}
+
+#restartBtn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+  filter: brightness(1.05);
+}
+
+#restartBtn:active {
+  transform: translateY(1px) scale(0.98);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.45);
+}
+
+/* HUD */
+.hud {
+  margin: 10px 0 8px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: radial-gradient(circle at top left, rgba(255, 217, 59, 0.25), transparent 60%),
+    radial-gradient(circle at bottom right, rgba(255, 107, 203, 0.2), transparent 55%),
+    var(--panel);
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.95rem;
+}
+
+/* Canvas container */
+.canvas-container {
+  position: relative;
+  background: radial-gradient(circle at 10% 0%, #28366b 0, #05091c 55%);
+  border-radius: 14px;
+  box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.7);
+  overflow: hidden;
+}
+
+/* Responsive canvas (aspect ratio ~ 9:16 for mobile feel) [web:18] */
+#gameCanvas {
+  width: 100%;
+  height: auto;
+  display: block;
+  aspect-ratio: 9 / 16;
+}
+
+/* Touch controls – only on small screens */
+.touch-controls {
+  display: none;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 6px;
+  padding: 0 16px 8px;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.touch-btn {
+  pointer-events: auto;
+  width: 72px;
+  height: 38px;
+  border-radius: 999px;
+  border: none;
+  background: rgba(9, 9, 121, 0.85);
+  color: var(--accent);
+  font-size: 1.2rem;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(6px);
+}
+
+/* Mobile breakpoint */
+@media (max-width: 640px) {
+  .game-wrapper {
+    padding: 12px;
+  }
+
+  .hud {
+    font-size: 0.85rem;
+  }
+
+  .touch-controls {
+    display: flex;
+  }
+}

@@ -62,7 +62,7 @@ function createKeyboard() {
     for (const ch of rowStr) {
       const key = document.createElement("button");
       key.className = "key";
-      if (ch === "ENTER") continue;
+    
       if (ch === "⌫") {
         key.textContent = "Del";
         key.classList.add("wide");
@@ -75,20 +75,19 @@ function createKeyboard() {
       key.addEventListener("click", () => handleKey(key.dataset.key));
       row.appendChild(key);
     }
-    const enterKey = document.createElement("button");
+   
+    keyboardElem.appendChild(row);
+  });
+const enterRow=document.createElement("div");
+enterRow.className="kb-row";
+
+ const enterKey = document.createElement("button");
     enterKey.className = "key wide";
     enterKey.textContent = "Enter";
     enterKey.dataset.key = "ENTER";
     enterKey.addEventListener("click", () => handleKey("ENTER"));
-    if (!rowStr.includes("ENTER")) {
-      if (rowStr.includes("A")) {
-        row.insertBefore(enterKey, row.firstChild);
-      } else {
-        row.appendChild(enterKey);
-      }
-    }
-    keyboardElem.appendChild(row);
-  });
+   enterRow.appendChild(enterKey);
+   keyboardElem.appendChild(enterRow);
 }
 
 function setStatus(msg, type = "") {
